@@ -9,7 +9,7 @@ export const Habitacion = ({photo, superPalabra, type, rating, titulo}) => {
             <img src={photo} />
         </div>
         <div className='apartamento'>
-            <span className={superPalabra? 'super':''}> {superPalabra? 'Superhost':''}</span>    
+            <span className={superPalabra? 'super':''}> {superPalabra? 'SUPER HOST':''}</span>    
             <p className="entire">{type}</p>
             <div>
                 <img  className='estrella' src='/estrella.png'/><span>{rating}</span>
