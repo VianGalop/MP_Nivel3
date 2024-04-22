@@ -1,7 +1,8 @@
 
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState } from 'react'
 import rooms from '../../assets/stays.json'
-import { Card } from '../Resultados'
+import { Card } from '../Resultados/Card'
+import './Nav.css'
 
 
 export const BarraNav = () => {
@@ -10,18 +11,6 @@ export const BarraNav = () => {
   const [search, setSearch] = useState('')
   const [result, setResults] = useState([])
   const [guest, setGuest] = useState(0)
-
-
-  /* function searchFunction(e) {
-      const text = e.target.value.toLowerCase()
-      setSearch(text)
-      if(text.trim().length === 0){
-        setResults([])
-        return;
-      } 
-      const rs = rooms.filter(room => room.city.toLowerCase().includes(text))
-      setResults(rs)
-  }  */
 
   function selecLocation(e){
     const text = e.target.value
@@ -41,7 +30,7 @@ export const BarraNav = () => {
     setGuest(parseInt(e.target.value))
   }
 
-  function filtrar(event) {
+  function filtrar (event) {
     event.preventDefault()
 
     if (guest > 0 && search != '') {
@@ -67,7 +56,9 @@ export const BarraNav = () => {
     }
 
     setShowRooms(rooms)
+
   }
+
 
   useEffect(() => {
     console.log('result', result);
@@ -75,6 +66,7 @@ export const BarraNav = () => {
     console.log("showRooms", showRooms);
   }, [result, search, showRooms]);  
   
+
   return (
     <>
         <div className="navbarra">
@@ -89,7 +81,7 @@ export const BarraNav = () => {
                 <option value="Vaasa"> Vaasa</option>
                 <option value="Oulu"> Oulu</option>
               </select>
-              <input type="text" placeholder="search"  className="inputSearch" onChange={numGuest} value={guest} />
+              <input type="text" placeholder="guest"  className="inputSearch" onChange={numGuest}  />
               <button className="btn" type="submit" onClick={filtrar}><img src='/busqueda.svg'/></button>
             </form>      
           </div>
@@ -101,12 +93,9 @@ export const BarraNav = () => {
             <h2 className='text-base'>{showRooms.length} stays</h2>
           </div>
           <div className='theCards'>
-            {
-              showRooms && showRooms.map((dato,i) =>(
-                <Card  key={i} photo={dato.photo} titulo={dato.title} type={dato.type} superhost={dato.superHost} rating={dato.rating} />           
-                )
-              )
-            }        
+              {
+                <Card data={showRooms}/>    
+              }     
           </div>
         </div>
        
