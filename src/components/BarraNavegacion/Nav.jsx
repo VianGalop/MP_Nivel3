@@ -12,7 +12,7 @@ export const BarraNav = () => {
   const [guest, setGuest] = useState(0)
 
 
-  function searchFunction(e) {
+  /* function searchFunction(e) {
       const text = e.target.value.toLowerCase()
       setSearch(text)
       if(text.trim().length === 0){
@@ -21,18 +21,29 @@ export const BarraNav = () => {
       } 
       const rs = rooms.filter(room => room.city.toLowerCase().includes(text))
       setResults(rs)
+  }  */
 
-      selecLocation(rs)
-  } 
+  function selecLocation(e){
+    const text = e.target.value
+    setSearch(text)
+    if(text.trim().length === 0){
+      setResults([])
+      return;
+    } 
 
-  function selecLocation(rs) {
-    setSearch(rs.city + " " + rs.country)
-    setResults([])
+    const rs = rooms.filter(room => room.city.includes(text))
+
+   /*  setSearch(rs.city + " " + rs.country)
+    setResults([]) */
   }
   
-  function filtrar(event) {
+  function numGuest(e){
+    setGuest(parseInt(e.target.value))
+  }
 
+  function filtrar(event) {
     event.preventDefault()
+
     if (guest > 0 && search != '') {
       const city = search.split(' ')[0];
       const rs = rooms.filter(room => room.city === city && room.maxGuests >= guest)
@@ -52,14 +63,18 @@ export const BarraNav = () => {
       const city = search.split(' ')[0];
       const rs = rooms.filter(room => room.city === city)
       setShowRooms(rs)
-      console.log("3)"+ JSON.stringify(rs));
       return;
     }
 
     setShowRooms(rooms)
-    console.log("4)"+JSON.stringify(rooms));
   }
 
+  useEffect(() => {
+    console.log('result', result);
+    console.log('search',search);
+    console.log("showRooms", showRooms);
+  }, [result, search, showRooms]);  
+  
   return (
     <>
         <div className="navbarra">
@@ -68,13 +83,13 @@ export const BarraNav = () => {
           </div>
           <div className='formSearch'>
             <form className="formulario" >
-              <select id="location" placeholder="search" className="inputSearch">
-                <option onClick={() => searchFunction("Helsinki")}> Helsinki</option>
-                <option onClick={() => selecLocation({city:"Turku", country:"Finland"})}> Turku</option>
-                <option onClick={() => selecLocation({city:"Vaasa", country:"Finland"})}> Vaasa</option>
-                <option onClick={() => selecLocation({city:"Oulu", country:"Finland"})}> Oulu</option>
+              <select id="location" placeholder="search" className="inputSearch" onChange={selecLocation}>
+                <option value="Helsinki"> Helsinki</option>
+                <option value="Turku"> Turku</option>
+                <option value="Vaasa"> Vaasa</option>
+                <option value="Oulu"> Oulu</option>
               </select>
-              <input type="text" name="location" id="location" placeholder="search"  className="inputSearch" onChange={(e) => setGuest(parseInt(e.target.value))} value={guest} />
+              <input type="text" placeholder="search"  className="inputSearch" onChange={numGuest} value={guest} />
               <button className="btn" type="submit" onClick={filtrar}><img src='/busqueda.svg'/></button>
             </form>      
           </div>
@@ -82,16 +97,16 @@ export const BarraNav = () => {
 
         <div className='result'>
           <div className='subtitulos'>
-            <h1 className='titulo'>{search}</h1>  
+            <h1 className='titulo'>Stays in {search} Finland</h1>  
             <h2 className='text-base'>{showRooms.length} stays</h2>
           </div>
           <div className='theCards'>
             {
-              
-              showRooms.map((dato,i) =>{
-                 <Card  key={i} photo={dato.photo} titulo={dato.title} type={dato.type} superhost={dato.superHost} rating={dato.rating} />
-              })
-            }              
+              showRooms && showRooms.map((dato,i) =>(
+                <Card  key={i} photo={dato.photo} titulo={dato.title} type={dato.type} superhost={dato.superHost} rating={dato.rating} />           
+                )
+              )
+            }        
           </div>
         </div>
        
